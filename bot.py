@@ -12,25 +12,38 @@ translator = Translator(from_lang = 'ru' ,to_lang = 'en')
 
 @bot.message_handler(commands=['start'])
 def start(message):
-	bot_mess = f'<b>Привет {message.from_user.first_name}!</b> \nя тестовый бот, которые может показать ситуацию по каронавирусу в мире или просто в странах, чтобы узнать подробности введите команду <b>/help</b>'
-	bot.send_message(message.from_user.id, bot_mess, parse_mode = 'html')
+	markup = telebot.types.ReplyKeyboardMarkup()
+	itembtnhelp = telebot.types.KeyboardButton('/help')
+	markup.row(itembtnhelp)
+
+	bot_mess = f'<b>Привет {message.from_user.first_name}!</b> \nя тестовый бот, которые может показать ситуацию по коронавирусу в мире или просто в странах, чтобы узнать подробности нажмите или введите <b>/help</b>'
+	bot.send_message(message.from_user.id, bot_mess, reply_markup = markup, parse_mode = 'html')
 
 @bot.message_handler(commands=['help'])
 def help(message):
+	markup = telebot.types.ReplyKeyboardMarkup()
+	item_btn_world = telebot.types.KeyboardButton('Мир')
+	item_btn_russia = telebot.types.KeyboardButton('Россия')
+	item_btn_usa = telebot.types.KeyboardButton('США')
+	item_btn_german = telebot.types.KeyboardButton('Германия')
+	item_btn_china = telebot.types.KeyboardButton('Китай')
+	
+	markup.row(item_btn_russia, item_btn_usa)
+	markup.row(item_btn_china, item_btn_german)
+	markup.row(item_btn_world)
+
 	bot_mess = '''
-	<b>Основные команды бота:</b>
-	<b>/start</b> - Стартовое сообщение
-	<b>/help</b> - выводит список всех команд
+	<b>Как пользоваться ботом: </b>
 	<b>*Название страны*</b> - выведет статистику по стране
 	<b>*Любое слово, не считая названия стран и команды*</b> - выведет статистику по миру
 	'''
-	bot.send_message(message.from_user.id, bot_mess, parse_mode = 'html')
+	bot.send_message(message.from_user.id, bot_mess, reply_markup = markup, parse_mode = 'html')
 
 @bot.message_handler(content_types = ['text'])
 def covid19(message):
 	translating = translator.translate(text = message.text)
 	get_mess_bot = translating
-	final_mess = '''Статистика по каронавирусу в <i>{}</i>:
+	final_mess = '''Статистика по коронавирусу в <i>{}</i>:
 					<b>Зараженные:</b> <i>{:,}</i>
 					<b>Выздоровевшие:</b> <i>{:,}</i>
 					<b>Смерти:</b> <i>{:,}</i>
