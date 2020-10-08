@@ -25,11 +25,11 @@ def help(message):
 	item_btn_world = telebot.types.KeyboardButton('Мир')
 	item_btn_russia = telebot.types.KeyboardButton('Россия')
 	item_btn_usa = telebot.types.KeyboardButton('США')
-	item_btn_german = telebot.types.KeyboardButton('Германия')
 	item_btn_china = telebot.types.KeyboardButton('Китай')
+	item_btn_ukrain = telebot.types.KeyboardButton('Украина')
 	
 	markup.row(item_btn_russia, item_btn_usa)
-	markup.row(item_btn_china, item_btn_german)
+	markup.row(item_btn_china, item_btn_ukrain)
 	markup.row(item_btn_world)
 
 	bot_mess = '''
@@ -41,7 +41,9 @@ def help(message):
 
 @bot.message_handler(content_types = ['text'])
 def covid19(message):
-	translating = translator.translate(text = message.text)
+	translating = translator.translate(text = message.text.lower())
+	if translating == 'Afganistan':
+		translating = 'Afghanistan'
 	get_mess_bot = translating
 	final_mess = '''Статистика по коронавирусу в <i>{}</i>:
 					<b>Зараженные:</b> <i>{:,}</i>
