@@ -3,10 +3,9 @@ import covid
 from datetime import datetime
 from translate import Translator
 import pytz
-import os
 
 
-token = os.getenv('token')
+token = open('token.txt', 'r').readline()
 bot = telebot.TeleBot(token)
 covid = covid.Covid(source = 'worldometers')
 translator = Translator(from_lang = 'ru' ,to_lang = 'en')
