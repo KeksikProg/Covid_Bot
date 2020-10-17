@@ -4,8 +4,10 @@ from datetime import datetime
 from translate import Translator
 import pytz
 import os
+from boto.s3.connection import S3Connection
 
-token = os.getenv('token')
+
+token = S3Connection(os.environ['token'])
 bot = telebot.TeleBot(token)
 covid = covid.Covid(source = 'worldometers')
 translator = Translator(from_lang = 'ru' ,to_lang = 'en')
